@@ -1,0 +1,49 @@
+[package]
+name = "fscan-rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "A network scanner written in Rust"
+
+# 同时构建库和二进制目标
+[lib]
+name = "fscan_rs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "fscan-rs"
+path = "src/main.rs"
+
+[dependencies]
+# 命令行参数解析（使用2.x版本，与代码兼容）
+clap = "2.33.3"
+
+# 网络相关
+ipnet = "2.5"
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.11", features = ["json"] }
+
+# 日志
+log = "0.4"
+env_logger = "0.9"
+
+# 并发
+futures = "0.3"
+
+# 序列化/反序列化
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# 纯Rust SMB实现（替代pavao）
+smb2 = "0.1.0"  # 使用可用版本
+
+# 其他纯Rust依赖
+rusqlite = { version = "0.28.0", features = ["bundled"] }
+rust-crypto = "0.2"
+
+[profile.release]
+opt-level = 3       # 最高级别的优化
+lto = true          # 启用链接时优化
+codegen-units = 1   # 降低并行度以提高优化
+panic = "abort"     # 在panic时直接终止程序（减小文件大小）
+strip = true        # 自动剥离符号信息
